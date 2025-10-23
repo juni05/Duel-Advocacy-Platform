@@ -49,6 +49,7 @@ The easiest way to get started is using the provided Makefile:
    git clone <repository-url>
    cd Duel-Advocacy-Platform
    make env            # Create environment file
+   Replace the MONGODB_URI in the .env file shared in email.
    make setup          # Install all dependencies
    make demo           # Run ETL on existing data and start services
    ```
@@ -57,6 +58,7 @@ The easiest way to get started is using the provided Makefile:
    - API: http://localhost:3000
    - Frontend: http://localhost:4200 (when running)
    - Health check: `curl http://localhost:3000/api/health`
+   - API Docs: http://localhost:3000/api-docs
 
 **Available Makefile commands:**
 ```bash
