@@ -50,7 +50,6 @@ The easiest way to get started is using the provided Makefile:
    cd Duel-Advocacy-Platform
    make env            # Create environment file
    Replace the MONGODB_URI in the .env file shared in email.
-   make setup          # Install all dependencies
    make demo           # Run ETL on existing data and start services
    ```
 
