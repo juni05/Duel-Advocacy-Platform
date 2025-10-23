@@ -47,7 +47,7 @@ The easiest way to get started is using the provided Makefile:
 1. **Clone and setup everything**
    ```bash
    git clone <repository-url>
-   cd take-home-duel
+   cd Duel-Advocacy-Platform
    make setup          # Install all dependencies
    make env            # Create environment file
    make demo           # Run ETL on existing data and start services
@@ -77,7 +77,7 @@ make clean          # Clean up everything
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd take-home-duel
+   cd Duel-Advocacy-Platform
    ```
 
 2. **Install dependencies**
