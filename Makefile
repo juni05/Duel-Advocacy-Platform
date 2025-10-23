@@ -26,23 +26,16 @@ help: ## Show this help message
 # SETUP & INSTALLATION
 # =============================================================================
 
-setup: ## Install all dependencies (backend + frontend) and run ETL if data exists
+setup: ## Install all dependencies (backend + frontend) and run ETL pipeline
 	@echo "📦 Installing backend dependencies..."
 	npm install
 	@echo "📦 Installing frontend dependencies..."
 	cd frontend/duel-dashboard && npm install
 	@echo "✅ Dependencies installed!"
 	@echo ""
-	@echo "🔄 Running ETL pipeline if data exists..."
-	@if [ -d "./data" ] && [ "$$(ls -A data/*.json 2>/dev/null | wc -l)" -gt 0 ]; then \
-		echo "✅ Found $$(ls data/*.json | wc -l) JSON files in ./data/"; \
-		make etl; \
-		echo "✅ Setup complete with data loaded!"; \
-	else \
-		echo "ℹ️  No data files found in ./data/ directory"; \
-		echo "   Place your JSON data files in the ./data/ directory, then run 'make etl' to load them"; \
-		echo "✅ Setup complete!"; \
-	fi
+	@echo "🔄 Running ETL pipeline..."
+	make etl
+	@echo "✅ Setup complete!"
 
 setup-backend: ## Install only backend dependencies
 	@echo "📦 Installing backend dependencies..."

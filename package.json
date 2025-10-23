@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/api/server.js",
     "dev": "tsx watch src/api/server.ts",
-    "etl": "CLEAN_DATABASE=true tsx src/etl/pipeline.ts",
+    "etl": "mkdir -p data && tar -xzf data.tar.gz -C data/ 2>/dev/null || echo 'Data already extracted or tar not found' && DATA_DIR=./data/mixed CLEAN_DATABASE=true tsx src/etl/pipeline.ts",
     "frontend": "cd frontend/duel-dashboard && npm start",
     "frontend:build": "cd frontend/duel-dashboard && npm run build",
     "test": "NODE_ENV=test jest --runInBand",
