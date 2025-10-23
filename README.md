@@ -1,27 +1,12 @@
 # Duel Advocacy Platform - ETL Pipeline & REST API
 
+
 A production-ready ETL pipeline and REST API for processing and analyzing advocacy platform data, built with TypeScript, Node.js, and MongoDB.
 
 ## 🏗️ Architecture Overview
 
-```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│  JSON Files │ ───▶ │ ETL Pipeline │ ───▶ │MongoDB Atlas│
-│  (10,000+)  │      │  (Streaming) │      │ (Cloud DB)  │
-└─────────────┘      └──────────────┘      └─────────────┘
-                                                   │
-                                                   ▼
-                                           ┌──────────────┐
-                                           │   REST API   │
-                                           │  (Express)   │
-                                           └──────────────┘
-                                                   │
-                                                   ▼
-                                          ┌──────────────┐
-                                          │   Angular    │
-                                          │  Dashboard   │
-                                          └──────────────┘
-```
+![Duel Advocacy Platform](./duel%20advocacy%20platform.png)
+
 
 ### Key Components
 
