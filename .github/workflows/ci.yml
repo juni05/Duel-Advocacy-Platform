@@ -139,7 +139,7 @@ jobs:
           node dist/etl/pipeline.js
         env:
           NODE_ENV: test
-          MONGODB_URI: ${{ secrets.MONGODB_URI_CI }}
+          MONGODB_URI: mongodb://localhost:27017/test
           DATA_DIR: data/mixed/
           BATCH_SIZE: 10
           CLEAN_DATABASE: true
