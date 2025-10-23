@@ -5,6 +5,17 @@ name: CD
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'jest.config.js'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - '.github/workflows/**'
     tags:
       - 'v*'
 

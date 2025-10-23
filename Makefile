@@ -107,17 +107,6 @@ etl: ## Run ETL pipeline on existing data
 	@echo "🔄 Running ETL pipeline..."
 	npm run etl
 
-data-etl: ## Run ETL pipeline on existing data (no data generation)
-	@echo "🔄 Running ETL pipeline on existing data..."
-	@if [ -d "./data" ] && [ "$$(ls -A data/*.json 2>/dev/null | wc -l)" -gt 0 ]; then \
-		echo "✅ Found $$(ls data/*.json | wc -l) JSON files in ./data/"; \
-		make etl; \
-	else \
-		echo "❌ No data files found in ./data/ directory"; \
-		echo "   Please ensure your JSON files are in the ./data/ directory"; \
-		exit 1; \
-	fi
-
 # =============================================================================
 # DEMO & TESTING
 # =============================================================================
@@ -125,7 +114,6 @@ data-etl: ## Run ETL pipeline on existing data (no data generation)
 demo: ## Run complete demo (setup + ETL + API + Frontend)
 	@echo "🎬 Starting complete demo with existing data..."
 	make setup
-	make data-etl
 	make prod
 	@echo ""
 	@echo "🎨 Starting frontend development server..."
