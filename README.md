@@ -48,8 +48,8 @@ The easiest way to get started is using the provided Makefile:
    ```bash
    git clone <repository-url>
    cd Duel-Advocacy-Platform
-   make setup          # Install all dependencies
    make env            # Create environment file
+   make setup          # Install all dependencies
    make demo           # Run ETL on existing data and start services
    ```
 

@@ -5,8 +5,30 @@ name: CI
 on:
   pull_request:
     branches: [main, dev]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'jest.config.js'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - '.github/workflows/**'
   push:
     branches: [dev]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'jest.config.js'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - '.github/workflows/**'
 
 env:
   CI: true
