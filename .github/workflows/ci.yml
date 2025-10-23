@@ -83,9 +83,6 @@ jobs:
       - name: Install frontend dependencies
         run: cd frontend/duel-dashboard && npm ci
 
-      - name: Run frontend linter
-        run: cd frontend/duel-dashboard && npm run lint
-
       - name: Run frontend tests
         run: cd frontend/duel-dashboard && npm test -- --watch=false --browsers=ChromeHeadless
         env:

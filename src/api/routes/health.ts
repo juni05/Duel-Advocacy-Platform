@@ -1,7 +1,5 @@
 import express, { Request, Response } from 'express';
 import { isConnected } from '../../utils/db';
-import { asyncHandler } from '../../utils/asyncHandler';
-
 const router = express.Router();
 
 /**
@@ -20,19 +18,16 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/HealthResponse'
  */
-router.get(
-  '/health',
-  asyncHandler(async (_req: Request, res: Response) => {
-    const dbStatus = isConnected() ? 'connected' : 'disconnected';
-    const uptime = process.uptime();
+router.get('/health', (_req: Request, res: Response) => {
+  const dbStatus = isConnected() ? 'connected' : 'disconnected';
+  const uptime = process.uptime();
 
-    res.status(200).json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      uptime: `${Math.floor(uptime)}s`,
-      database: dbStatus,
-      environment: process.env.NODE_ENV || 'development',
-    });
-  }),
-);
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: `${Math.floor(uptime)}s`,
+    database: dbStatus,
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
 export default router;

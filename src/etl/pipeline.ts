@@ -25,14 +25,14 @@ function deduplicateUsers(users: User[]): User[] {
 
   for (const user of users) {
     const existing = userMap.get(user.userId);
-    
+
     if (!existing) {
       userMap.set(user.userId, user);
     } else {
       // Keep the record with more data
       const existingScore = calculateCompletenessScore(existing);
       const newScore = calculateCompletenessScore(user);
-      
+
       if (newScore > existingScore) {
         userMap.set(user.userId, user);
       } else if (newScore === existingScore) {
@@ -50,7 +50,7 @@ function deduplicateUsers(users: User[]): User[] {
  */
 function calculateCompletenessScore(user: User): number {
   let score = 0;
-  
+
   if (user.name) score += 1;
   if (user.email) score += 1;
   if (user.joinDate) score += 1;
@@ -60,7 +60,7 @@ function calculateCompletenessScore(user: User): number {
   score += user.salesAttributions.length * 5;
   score += user.totalEngagement;
   score += user.totalSales;
-  
+
   return score;
 }
 
@@ -73,28 +73,22 @@ function mergeUsers(user1: User, user2: User): User {
     name: user1.name || user2.name,
     email: user1.email || user2.email,
     joinDate: user1.joinDate || user2.joinDate,
-    
+
     // Merge and deduplicate arrays
     socialHandles: deduplicateSocialHandles([
       ...user1.socialHandles,
       ...user2.socialHandles,
     ]),
-    
-    programs: deduplicatePrograms([
-      ...user1.programs,
-      ...user2.programs,
-    ]),
-    
-    posts: deduplicatePosts([
-      ...user1.posts,
-      ...user2.posts,
-    ]),
-    
+
+    programs: deduplicatePrograms([...user1.programs, ...user2.programs]),
+
+    posts: deduplicatePosts([...user1.posts, ...user2.posts]),
+
     salesAttributions: deduplicateSalesAttributions([
       ...user1.salesAttributions,
       ...user2.salesAttributions,
     ]),
-    
+
     // Recalculate totals
     totalEngagement: 0, // Will be recalculated
     totalSales: 0, // Will be recalculated
@@ -105,15 +99,15 @@ function mergeUsers(user1: User, user2: User): User {
  * Deduplicate social handles by platform
  */
 function deduplicateSocialHandles(handles: User['socialHandles']) {
-  const seen = new Map<string, typeof handles[0]>();
-  
+  const seen = new Map<string, (typeof handles)[0]>();
+
   for (const handle of handles) {
     const key = `${handle.platform}:${handle.handle}`;
     if (!seen.has(key)) {
       seen.set(key, handle);
     }
   }
-  
+
   return Array.from(seen.values());
 }
 
@@ -121,14 +115,14 @@ function deduplicateSocialHandles(handles: User['socialHandles']) {
  * Deduplicate programs by programId
  */
 function deduplicatePrograms(programs: User['programs']) {
-  const seen = new Map<string, typeof programs[0]>();
-  
+  const seen = new Map<string, (typeof programs)[0]>();
+
   for (const program of programs) {
     if (!seen.has(program.programId)) {
       seen.set(program.programId, program);
     }
   }
-  
+
   return Array.from(seen.values());
 }
 
@@ -136,11 +130,11 @@ function deduplicatePrograms(programs: User['programs']) {
  * Deduplicate posts by postId
  */
 function deduplicatePosts(posts: User['posts']) {
-  const seen = new Map<string, typeof posts[0]>();
-  
+  const seen = new Map<string, (typeof posts)[0]>();
+
   for (const post of posts) {
     const existing = seen.get(post.postId);
-    
+
     if (!existing) {
       seen.set(post.postId, post);
     } else {
@@ -150,7 +144,7 @@ function deduplicatePosts(posts: User['posts']) {
       }
     }
   }
-  
+
   return Array.from(seen.values());
 }
 
@@ -159,12 +153,12 @@ function deduplicatePosts(posts: User['posts']) {
  */
 function deduplicateSalesAttributions(attributions: User['salesAttributions']) {
   const salesMap = new Map<string, number>();
-  
+
   for (const attribution of attributions) {
     const current = salesMap.get(attribution.programId) || 0;
     salesMap.set(attribution.programId, current + attribution.amount);
   }
-  
+
   return Array.from(salesMap.entries()).map(([programId, amount]) => ({
     programId,
     amount,
@@ -177,14 +171,14 @@ function deduplicateSalesAttributions(attributions: User['salesAttributions']) {
 function recalculateTotals(user: User): User {
   user.totalEngagement = user.posts.reduce(
     (sum, post) => sum + post.engagement,
-    0
+    0,
   );
-  
+
   user.totalSales = user.salesAttributions.reduce(
     (sum, sale) => sum + sale.amount,
-    0
+    0,
   );
-  
+
   return user;
 }
 
@@ -269,15 +263,15 @@ export async function runPipeline(
         if (currentBatch.length >= batchSize) {
           // Deduplicate within batch
           const deduplicatedBatch = deduplicateUsers(currentBatch);
-          
+
           // Filter out users we've already processed
           const newUsers = deduplicatedBatch.filter(
-            (user) => !processedUserIds.has(user.userId)
+            (user) => !processedUserIds.has(user.userId),
           );
-          
+
           // Mark as processed
           newUsers.forEach((user) => processedUserIds.add(user.userId));
-          
+
           logger.info('Batch deduplication', {
             original: currentBatch.length,
             deduplicated: deduplicatedBatch.length,
@@ -288,12 +282,12 @@ export async function runPipeline(
           if (newUsers.length > 0) {
             // Recalculate totals for merged users
             newUsers.forEach(recalculateTotals);
-            
+
             const loadResult = await loadUserBatch(newUsers, {
               batchSize,
               upsert: true, // Always upsert to handle updates
             });
-            
+
             statistics.successfulRecords +=
               loadResult.inserted + loadResult.updated;
             statistics.failedRecords += loadResult.failed;
@@ -327,11 +321,11 @@ export async function runPipeline(
     if (currentBatch.length > 0) {
       const deduplicatedBatch = deduplicateUsers(currentBatch);
       const newUsers = deduplicatedBatch.filter(
-        (user) => !processedUserIds.has(user.userId)
+        (user) => !processedUserIds.has(user.userId),
       );
-      
+
       newUsers.forEach((user) => processedUserIds.add(user.userId));
-      
+
       logger.info(`Loading final batch`, {
         original: currentBatch.length,
         deduplicated: deduplicatedBatch.length,
@@ -340,13 +334,14 @@ export async function runPipeline(
 
       if (newUsers.length > 0) {
         newUsers.forEach(recalculateTotals);
-        
+
         const loadResult = await loadUserBatch(newUsers, {
           batchSize,
           upsert: true,
         });
-        
-        statistics.successfulRecords += loadResult.inserted + loadResult.updated;
+
+        statistics.successfulRecords +=
+          loadResult.inserted + loadResult.updated;
         statistics.failedRecords += loadResult.failed;
       }
     }
