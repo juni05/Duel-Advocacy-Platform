@@ -16,17 +16,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download backend build artifacts
-        uses: actions/download-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: backend-dist-20.x
-          path: dist/
+          node-version: '20.x'
+          cache: 'npm'
 
-      - name: Download frontend build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist-20.x
-          path: frontend/
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Build backend
+        run: npm run build
+
+      - name: Install frontend dependencies
+        run: cd frontend/duel-dashboard && npm ci
+
+      - name: Build frontend
+        run: cd frontend/duel-dashboard && npm run build -- --configuration=production
 
       - name: Extract data files for Docker build
         run: |
